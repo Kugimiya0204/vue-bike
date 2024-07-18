@@ -1,9 +1,13 @@
 <script setup>
 import axios from 'axios';
 import { computed, ref } from 'vue';
+import Paginate from 'vuejs-paginate-next';
 
 const searchtext = ref('');
 const bikeList = ref(null);
+const currpage = ref(1);
+const totalpage = ref(1);
+const perpagenumber = 20;
 const tittleList = [
   'sno',
   'sna',
@@ -21,6 +25,7 @@ getData();
 const filteredData = computed(() => {
   let data = bikeList.value;
   let searchdata = searchtext.value;
+  let nowpage = currpage.value;
   if (searchdata) {
     data = data.filter((row) => {
       return Object.keys(row).some(() => {
@@ -28,8 +33,25 @@ const filteredData = computed(() => {
       });
     });
   }
+
+  settotalpage(data);
+
+  let index = 0;
+  if (data) {
+    data = data.filter(() => {
+      index++;
+      if (index > (nowpage - 1) * perpagenumber && index <= nowpage * perpagenumber) {
+        return true;
+      }
+      return false;
+    });
+  }
   return data;
 });
+
+function settotalpage(data) {
+  totalpage.value = data ? Math.ceil(data.length / perpagenumber) : 0;
+}
 
 function getData() {
   callapi().then((response) => {
@@ -43,6 +65,10 @@ async function callapi() {
   );
   return res;
 }
+
+function changepage(page) {
+  currpage.value = page;
+}
 </script>
 
 <template>
@@ -52,21 +78,26 @@ async function callapi() {
     </div>
     <div class="col-auto">
       <button type="submit" class="btn btn-primary mb-3">Search</button>
-      <h1>{{ searchtext }}</h1>
     </div>
   </form>
+  <Paginate
+    :page-count="totalpage"
+    :page-range="5"
+    :initial-page="1"
+    :click-handler="changepage"
+  ></Paginate>
   <table class="table table-striped">
     <thead>
-      <tr>
-        <th class="col-1">站點編號</th>
-        <th class="col-1">站點名稱</th>
-        <th class="col-1">站點所在區域</th>
-        <th class="col-1">站點地址</th>
-        <th class="col-1">總車位數量</th>
-        <th class="col-1">可租借的腳踏車數量</th>
-        <th class="col-1">站點緯度</th>
-        <th class="col-1">站點經度</th>
-        <th class="col-1">可歸還的腳踏車數量</th>
+      <tr align="center" valign="middle">
+        <th class="col-1 title">站點編號</th>
+        <th class="col-1 title">站點名稱</th>
+        <th class="col-1 title">站點所在區域</th>
+        <th class="col-1 title">站點地址</th>
+        <th class="col-1 title">總車位數量</th>
+        <th class="col-2 title">可租借的腳踏車數量</th>
+        <th class="col-1 title">站點緯度</th>
+        <th class="col-1 title">站點經度</th>
+        <th class="col-1 title">可歸還的腳踏車數量</th>
       </tr>
     </thead>
     <tbody>
@@ -78,3 +109,11 @@ async function callapi() {
     </tbody>
   </table>
 </template>
+
+<style>
+.title {
+  border: solid black 1px;
+  height: 20px;
+  background-color: aqua;
+}
+</style>
