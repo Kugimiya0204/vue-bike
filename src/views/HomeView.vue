@@ -101,27 +101,45 @@ function abikesasc() {
 </script>
 
 <template>
-  <form class="row g-3">
-    <div class="col-auto">
-      <input type="text" placeholder="輸入地址" v-model="searchtext" />
+  <div
+    name="all"
+    style="
+      background-image: url('https://img.freepik.com/premium-photo/ubike-promotes-eco-friendly-urban-transportation-taiwan_875825-180074.jpg');
+    "
+  >
+    <div class="ms-2 me-0 row mt-2">
+      <div class="col-5 align-self-start">
+        <h1
+          style="
+            border: solid black 1px;
+            background-color: aquamarine;
+            text-align: center;
+            font-weight: 900;
+          "
+        >
+          Youbike 資料模擬
+        </h1>
+      </div>
+      <div class="col-4 align-self-end">
+        <form class="row g-3">
+          <div class="col-auto">
+            <input type="text" placeholder="輸入地址" v-model="searchtext" />
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Search</button>
+          </div>
+        </form>
+      </div>
     </div>
-    <div class="col-auto">
-      <button type="submit" class="btn btn-primary mb-3">Search</button>
-    </div>
-  </form>
-  <Paginate
-    :page-count="totalpage"
-    :page-range="5"
-    :initial-page="1"
-    :click-handler="changepage"
-  ></Paginate>
+  </div>
+
   <table class="table table-striped">
     <thead>
       <tr>
         <th class="col-1 title text-center">站點編號</th>
-        <th class="col-1 title text-center">站點名稱</th>
+        <th class="col-2 title text-center">站點名稱</th>
         <th class="col-1 title text-center">站點所在區域</th>
-        <th class="col-1 title text-center">站點地址</th>
+        <th class="col-2 title text-center">站點地址</th>
         <th class="col-1 title text-center">
           <span>總車位數量</span>
           <span>
@@ -153,7 +171,7 @@ function abikesasc() {
             </svg>
           </span>
         </th>
-        <th class="col-2 title text-center">
+        <th class="col-1 title text-center">
           <div class="flex item-center">
             <span>可租借的腳踏車數量</span>
             <span>
@@ -199,6 +217,12 @@ function abikesasc() {
       </tr>
     </tbody>
   </table>
+  <Paginate
+    :page-count="totalpage"
+    :page-range="5"
+    :initial-page="1"
+    :click-handler="changepage"
+  ></Paginate>
 </template>
 
 <style>
