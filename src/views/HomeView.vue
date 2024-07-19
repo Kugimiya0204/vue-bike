@@ -10,7 +10,7 @@ const totalpage = ref(1);
 const perpagenumber = 20;
 
 const sortkey = ref('');
-const sortorder = ref([{ total: 1 }, { available_rent_bikes: 1 }]);
+const sortorder = ref({ total: 0, available_rent_bikes: 0 });
 const tittleList = [
   'sno',
   'sna',
@@ -94,19 +94,23 @@ function resetcurrpage() {
 }
 function totaldesc() {
   sortkey.value = 'total';
-  sortorder.value[sortkey.value] = 1;
+  sortorder.value.total = 1;
+  sortorder.value.available_rent_bikes = 0;
 }
 function totalasc() {
   sortkey.value = 'total';
-  sortorder.value[sortkey.value] = -1;
+  sortorder.value.total = -1;
+  sortorder.value.available_rent_bikes = 0;
 }
 function abikesdesc() {
   sortkey.value = 'available_rent_bikes';
-  sortorder.value[sortkey.value] = 1;
+  sortorder.value.available_rent_bikes = 1;
+  sortorder.value.total = 0;
 }
 function abikesasc() {
   sortkey.value = 'available_rent_bikes';
-  sortorder.value[sortkey.value] = -1;
+  sortorder.value.available_rent_bikes = -1;
+  sortorder.value.total = 0;
 }
 </script>
 
@@ -150,6 +154,7 @@ function abikesasc() {
               <span>總車位數量</span>
               <span>
                 <svg
+                  v-if="sortorder.total != 1"
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
@@ -163,6 +168,20 @@ function abikesasc() {
                   />
                 </svg>
                 <svg
+                  v-if="sortorder.total == 1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-caret-up-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"
+                  />
+                </svg>
+                <svg
+                  v-if="sortorder.total != -1"
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
@@ -175,6 +194,19 @@ function abikesasc() {
                     d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"
                   />
                 </svg>
+                <svg
+                  v-if="sortorder.total == -1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-caret-down-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
+                  />
+                </svg>
               </span>
             </th>
             <th class="col-1 title text-center bg-warning-subtle">
@@ -182,6 +214,7 @@ function abikesasc() {
                 <span>可租借的腳踏車數量</span>
                 <span>
                   <svg
+                    v-if="sortorder.available_rent_bikes != 1"
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
@@ -195,6 +228,20 @@ function abikesasc() {
                     />
                   </svg>
                   <svg
+                    v-if="sortorder.available_rent_bikes == 1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-caret-up-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"
+                    />
+                  </svg>
+                  <svg
+                    v-if="sortorder.available_rent_bikes != -1"
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
@@ -205,6 +252,19 @@ function abikesasc() {
                   >
                     <path
                       d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"
+                    />
+                  </svg>
+                  <svg
+                    v-if="sortorder.available_rent_bikes == -1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-caret-down-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
                     />
                   </svg>
                 </span>
