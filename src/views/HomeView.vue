@@ -1,13 +1,14 @@
 <script setup>
 import axios from 'axios';
 import { computed, ref } from 'vue';
-import Paginate from 'vuejs-paginate-next';
 
 const searchtext = ref('');
 const bikeList = ref(null);
+
 const currpage = ref(1);
 const totalpage = ref(1);
 const perpagenumber = 20;
+
 const sortkey = ref('');
 const sortorder = ref([{ total: 1 }, { available_rent_bikes: 1 }]);
 const tittleList = [
@@ -29,10 +30,10 @@ const filteredData = computed(() => {
   let searchdata = searchtext.value;
   let nowpage = currpage.value;
   if (searchdata) {
+    resetcurrpage();
+    console.log(data);
     data = data.filter((row) => {
-      return Object.keys(row).some(() => {
-        return String(row['ar']).indexOf(searchdata) > -1;
-      });
+      return String(row['ar']).indexOf(searchdata) > -1;
     });
   }
 
@@ -82,6 +83,15 @@ async function callapi() {
 function changepage(page) {
   currpage.value = page;
 }
+function prevpage() {
+  currpage.value--;
+}
+function nextpage() {
+  currpage.value++;
+}
+function resetcurrpage() {
+  currpage.value = 1;
+}
 function totaldesc() {
   sortkey.value = 'total';
   sortorder.value[sortkey.value] = 1;
@@ -128,7 +138,7 @@ function abikesasc() {
         </form>
       </div>
     </nav>
-    <div name="table" style="width: 80%; margin-left: 10%">
+    <div name="table" style="width: 80%; margin-left: 10%; padding-bottom: 2%; margin-bottom: 1%">
       <table class="table table-striped">
         <thead>
           <tr>
@@ -215,12 +225,39 @@ function abikesasc() {
       </table>
     </div>
   </div>
-  <Paginate
-    :page-count="totalpage"
-    :page-range="5"
-    :initial-page="1"
-    :click-handler="changepage"
-  ></Paginate>
+  <div name="page" style="width: 40%; margin-left: 40%">
+    <ul class="pagination">
+      <li v-if="currpage != 1" class="page-item">
+        <a class="page-link" href="#" @click="prevpage">Previous</a>
+      </li>
+      <li v-else class="page-item">
+        <a class="page-link bg-secondary-subtle">Previous</a>
+      </li>
+      <li v-for="index in totalpage" :key="index" class="page-item">
+        <button
+          v-if="index == currpage"
+          class="page-link bg-primary text-white"
+          href="#"
+          @click="changepage(index)"
+        >
+          {{ index }}
+        </button>
+        <button
+          v-else-if="index <= currpage + 2 && index >= currpage - 2"
+          class="page-link"
+          href="#"
+          @click="changepage(index)"
+        >
+          {{ index }}
+        </button>
+      </li>
+      <li v-if="currpage + 3 < totalpage"><a class="page-link" href="#">...</a></li>
+      <li v-if="currpage != totalpage" class="page-item">
+        <a class="page-link" href="#" @click="nextpage">Next</a>
+      </li>
+      <li v-else class="page-item"><a class="page-link bg-secondary-subtle">Next</a></li>
+    </ul>
+  </div>
 </template>
 
 <style>
