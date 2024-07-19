@@ -2,15 +2,23 @@
 import axios from 'axios';
 import { computed, ref } from 'vue';
 
+//搜尋用的字
 const searchtext = ref('');
+//記錄所有bike資料
 const bikeList = ref(null);
 
+//現在在第幾頁
 const currpage = ref(1);
+//全部有幾頁
 const totalpage = ref(1);
+//每頁有幾個
 const perpagenumber = 20;
 
+//記錄order的鍵是哪個
 const sortkey = ref('');
+//紀錄order是asc還是desc
 const sortorder = ref({ total: 0, available_rent_bikes: 0 });
+//紀錄title
 const tittleList = [
   'sno',
   'sna',
@@ -23,23 +31,36 @@ const tittleList = [
   'available_return_bikes'
 ];
 
+//呼叫api抓資料
 getData();
 
+//計算要呈現的table
 const filteredData = computed(() => {
+  //確認bike資料改變
   let data = bikeList.value;
+  //確認searchtext改變
   let searchdata = searchtext.value;
+  //確認現在頁數改變
   let nowpage = currpage.value;
+
+  //如果有搜尋字
   if (searchdata) {
+    //重設目前頁數為1
     resetcurrpage();
-    console.log(data);
+    //過濾要呈現table資料
     data = data.filter((row) => {
       return String(row['ar']).indexOf(searchdata) > -1;
     });
   }
 
+  //確認order的鍵是否改變
   const key = sortkey.value;
+
+  //如果order有鍵
   if (key) {
+    //拿到order是asc或desc
     const order = sortorder.value[key];
+    //使目前table排序
     data = data.slice().sort((a, b) => {
       a = a[key];
       b = b[key];
@@ -47,10 +68,15 @@ const filteredData = computed(() => {
     });
   }
 
+  //設定目前總頁數
   settotalpage(data);
 
+  //重設index
   let index = 0;
+
+  //如果有資料
   if (data) {
+    //將資料過濾成當前頁數應有的
     data = data.filter(() => {
       index++;
       if (index > (nowpage - 1) * perpagenumber && index <= nowpage * perpagenumber) {
@@ -63,16 +89,18 @@ const filteredData = computed(() => {
   return data;
 });
 
+//設定目前總頁數
 function settotalpage(data) {
   totalpage.value = data ? Math.ceil(data.length / perpagenumber) : 0;
 }
 
+//得到資料並用變數接住
 function getData() {
   callapi().then((response) => {
     bikeList.value = response.data;
   });
 }
-
+//呼叫api
 async function callapi() {
   const res = await axios.get(
     'https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json'
@@ -80,33 +108,41 @@ async function callapi() {
   return res;
 }
 
+//改變當前頁數為page
 function changepage(page) {
   currpage.value = page;
 }
+//往前一頁
 function prevpage() {
   currpage.value--;
 }
+//往後一頁
 function nextpage() {
   currpage.value++;
 }
+//重設為第一頁
 function resetcurrpage() {
   currpage.value = 1;
 }
+//以total(總車位數量)為鍵由大到小
 function totaldesc() {
   sortkey.value = 'total';
   sortorder.value.total = 1;
   sortorder.value.available_rent_bikes = 0;
 }
+//以total(總車位數量)為鍵由小到大
 function totalasc() {
   sortkey.value = 'total';
   sortorder.value.total = -1;
   sortorder.value.available_rent_bikes = 0;
 }
+//以available_return_bikes(可租借的腳踏車數量)為鍵由大到小
 function abikesdesc() {
   sortkey.value = 'available_rent_bikes';
   sortorder.value.available_rent_bikes = 1;
   sortorder.value.total = 0;
 }
+//以available_return_bikes(可租借的腳踏車數量)為鍵由大到小
 function abikesasc() {
   sortkey.value = 'available_rent_bikes';
   sortorder.value.available_rent_bikes = -1;
@@ -117,7 +153,6 @@ function abikesasc() {
 <template>
   <div
     name="all"
-    class=""
     style="
       background-image: url('https://img.freepik.com/premium-photo/ubike-promotes-eco-friendly-urban-transportation-taiwan_875825-180074.jpg');
     "
@@ -278,6 +313,7 @@ function abikesasc() {
         <tbody>
           <tr v-for="bike in filteredData" :key="bike">
             <td v-for="key in tittleList" :key="key">
+              <div v-if="key == ar"></div>
               {{ bike[key] }}
             </td>
           </tr>
