@@ -32,8 +32,7 @@ const tittleList = [
 ];
 
 //呼叫api抓資料
-
-getData();
+callapi();
 
 //計算要呈現的table
 const filteredData = computed(() => {
@@ -95,18 +94,12 @@ function settotalpage(data) {
   totalpage.value = data ? Math.ceil(data.length / perpagenumber) : 0;
 }
 
-//得到資料並用變數接住
-function getData() {
-  callapi().then((response) => {
-    bikeList.value = response.data;
-  });
-}
-//呼叫api
+//呼叫api，獲得資料
 async function callapi() {
   const res = await axios.get(
     'https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json'
   );
-  return res;
+  bikeList.value = res.data;
 }
 
 //改變當前頁數為page
