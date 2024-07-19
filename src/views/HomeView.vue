@@ -103,120 +103,118 @@ function abikesasc() {
 <template>
   <div
     name="all"
+    class=""
     style="
       background-image: url('https://img.freepik.com/premium-photo/ubike-promotes-eco-friendly-urban-transportation-taiwan_875825-180074.jpg');
     "
   >
-    <div class="ms-2 me-0 row mt-2">
-      <div class="col-5 align-self-start">
-        <h1
+    <nav class="navbar bg-body-tertiary bg-info-subtle mb-2">
+      <div class="container-fluid">
+        <a
           style="
             border: solid black 1px;
             background-color: aquamarine;
             text-align: center;
             font-weight: 900;
+            font-size: 30px;
+            margin-left: 5%;
           "
         >
           Youbike 資料模擬
-        </h1>
-      </div>
-      <div class="col-4 align-self-end">
-        <form class="row g-3">
-          <div class="col-auto">
-            <input type="text" placeholder="輸入地址" v-model="searchtext" />
-          </div>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-3">Search</button>
-          </div>
+        </a>
+        <form class="d-flex">
+          <input type="text" class="my-1 me-3" placeholder="輸入地址" v-model="searchtext" />
+          <button type="submit" class="btn btn-primary">Search</button>
         </form>
       </div>
+    </nav>
+    <div name="table" style="width: 80%; margin-left: 10%">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="col-1 title text-center bg-warning-subtle">站點編號</th>
+            <th class="col-2 title text-center bg-warning-subtle">站點名稱</th>
+            <th class="col-1 title text-center bg-warning-subtle">站點所在區域</th>
+            <th class="col-2 title text-center bg-warning-subtle">站點地址</th>
+            <th class="col-1 title text-center bg-warning-subtle">
+              <span>總車位數量</span>
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-caret-up"
+                  viewBox="0 0 16 16"
+                  @click="totaldesc"
+                >
+                  <path
+                    d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659"
+                  />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-caret-down"
+                  viewBox="0 0 16 16"
+                  @click="totalasc"
+                >
+                  <path
+                    d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"
+                  />
+                </svg>
+              </span>
+            </th>
+            <th class="col-1 title text-center bg-warning-subtle">
+              <div class="flex item-center">
+                <span>可租借的腳踏車數量</span>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-caret-up"
+                    viewBox="0 0 16 16"
+                    @click="abikesdesc"
+                  >
+                    <path
+                      d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659"
+                    />
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-caret-down"
+                    viewBox="0 0 16 16"
+                    @click="abikesasc"
+                  >
+                    <path
+                      d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </th>
+            <th class="col-1 title text-center bg-warning-subtle">站點緯度</th>
+            <th class="col-1 title text-center bg-warning-subtle">站點經度</th>
+            <th class="col-1 title text-center bg-warning-subtle">可歸還的腳踏車數量</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="bike in filteredData" :key="bike">
+            <td v-for="key in tittleList" :key="key">
+              {{ bike[key] }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th class="col-1 title text-center">站點編號</th>
-        <th class="col-2 title text-center">站點名稱</th>
-        <th class="col-1 title text-center">站點所在區域</th>
-        <th class="col-2 title text-center">站點地址</th>
-        <th class="col-1 title text-center">
-          <span>總車位數量</span>
-          <span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-caret-up"
-              viewBox="0 0 16 16"
-              @click="totaldesc"
-            >
-              <path
-                d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659"
-              />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-caret-down"
-              viewBox="0 0 16 16"
-              @click="totalasc"
-            >
-              <path
-                d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"
-              />
-            </svg>
-          </span>
-        </th>
-        <th class="col-1 title text-center">
-          <div class="flex item-center">
-            <span>可租借的腳踏車數量</span>
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-caret-up"
-                viewBox="0 0 16 16"
-                @click="abikesdesc"
-              >
-                <path
-                  d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-caret-down"
-                viewBox="0 0 16 16"
-                @click="abikesasc"
-              >
-                <path
-                  d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"
-                />
-              </svg>
-            </span>
-          </div>
-        </th>
-        <th class="col-1 title text-center">站點緯度</th>
-        <th class="col-1 title text-center">站點經度</th>
-        <th class="col-1 title text-center">可歸還的腳踏車數量</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="bike in filteredData" :key="bike">
-        <td v-for="key in tittleList" :key="key">
-          {{ bike[key] }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
   <Paginate
     :page-count="totalpage"
     :page-range="5"
@@ -229,7 +227,6 @@ function abikesasc() {
 .title {
   border: solid black 1px;
   height: 50px;
-  background-color: aqua;
   vertical-align: middle;
 }
 </style>
