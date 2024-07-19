@@ -152,23 +152,43 @@ function haveSerchText(ar) {
   <div
     name="all"
     style="
-      background-image: url('https://img.freepik.com/premium-photo/ubike-promotes-eco-friendly-urban-transportation-taiwan_875825-180074.jpg');
+      background-image: url('https://as2.ftcdn.net/v2/jpg/01/66/56/07/1000_F_166560713_jsAL3tE7oc2ROtpAIvMkDkHFzlTdg0SF.jpg');
+      background-size: cover;
     "
   >
     <nav class="navbar bg-body-tertiary bg-info-subtle mb-2">
       <div class="container-fluid">
-        <a
+        <span
+          class="myfont2"
           style="
             border: solid black 1px;
             background-color: aquamarine;
-            text-align: center;
             font-weight: 900;
             font-size: 30px;
             margin-left: 5%;
+            width: 20%;
           "
-        >
-          Youbike 資料模擬
-        </a>
+          ><img
+            src="https://images.pexels.com/photos/686230/pexels-photo-686230.jpeg"
+            style="width: 18%; border: solid green 2px; border-radius: 99em"
+          />
+          <a> Youbike Data Table </a>
+        </span>
+        <img
+          src="https://as2.ftcdn.net/v2/jpg/01/35/12/95/1000_F_135129528_glAKm25XD0kLcxbjz98SrD2AUlHnpT7L.jpg"
+          style="
+            width: 5%;
+            border: solid black 1px;
+            border-radius: 99em;
+            position: absolute;
+            top: 1px;
+            left: 500px;
+            animation: moveToRight;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+            animation-timing-function: cubic-bezier(0.4, 0.5, 0.9, 1);
+          "
+        />
         <form class="d-flex">
           <input type="text" class="my-1 me-3" placeholder="輸入地址" v-model="searchtext" />
           <button type="submit" class="btn btn-primary">Search</button>
@@ -176,14 +196,14 @@ function haveSerchText(ar) {
       </div>
     </nav>
     <div name="table" style="width: 80%; margin-left: 10%; padding-bottom: 2%; margin-bottom: 1%">
-      <table class="table table-striped">
+      <table class="table table-striped border border-black">
         <thead>
           <tr>
-            <th class="col-1 title text-center bg-warning-subtle">站點編號</th>
-            <th class="col-2 title text-center bg-warning-subtle">站點名稱</th>
-            <th class="col-1 title text-center bg-warning-subtle">站點所在區域</th>
-            <th class="col-2 title text-center bg-warning-subtle">站點地址</th>
-            <th class="col-1 title text-center bg-warning-subtle">
+            <th class="col-1 myfont1 title text-center bg-warning-subtle">站點編號</th>
+            <th class="col-2 myfont1 title text-center bg-warning-subtle">站點名稱</th>
+            <th class="col-1 myfont1 title text-center bg-warning-subtle">站點所在區域</th>
+            <th class="col-2 myfont1 title text-center bg-warning-subtle">站點地址</th>
+            <th class="col-1 myfont1 title text-center bg-warning-subtle">
               <span>總車位數量</span>
               <span>
                 <svg
@@ -242,7 +262,7 @@ function haveSerchText(ar) {
                 </svg>
               </span>
             </th>
-            <th class="col-1 title text-center bg-warning-subtle">
+            <th class="col-1 myfont1 title text-center bg-warning-subtle">
               <div class="flex item-center">
                 <span>可租借的腳踏車數量</span>
                 <span>
@@ -303,9 +323,9 @@ function haveSerchText(ar) {
                 </span>
               </div>
             </th>
-            <th class="col-1 title text-center bg-warning-subtle">站點緯度</th>
-            <th class="col-1 title text-center bg-warning-subtle">站點經度</th>
-            <th class="col-1 title text-center bg-warning-subtle">可歸還的腳踏車數量</th>
+            <th class="col-1 myfont1 title text-center bg-warning-subtle">站點緯度</th>
+            <th class="col-1 myfont1 title text-center bg-warning-subtle">站點經度</th>
+            <th class="col-1 myfont1 title text-center bg-warning-subtle">可歸還的腳踏車數量</th>
           </tr>
         </thead>
         <tbody>
@@ -313,7 +333,7 @@ function haveSerchText(ar) {
             <td class="text-center" v-for="key in tittleList" :key="key">
               <div v-if="key == 'ar' && haveSerchText(bike[key])">
                 {{ bike[key].substring(0, bike[key].indexOf(searchtext)) }}
-                <span class="text-danger">
+                <span class="text-danger" style="font-weight: 900; font-size: 20px">
                   {{ searchtext }}
                 </span>
                 {{ bike[key].substring(bike[key].indexOf(searchtext) + searchtext.length) }}
@@ -367,5 +387,33 @@ function haveSerchText(ar) {
   border: solid black 1px;
   height: 50px;
   vertical-align: middle;
+  font-weight: 900;
+}
+@keyframes moveToRight {
+  0% {
+    left: 500px;
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  25% {
+    left: 1500px;
+    transform: rotateY(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    left: 1500px;
+    transform: rotateY(180deg);
+    opacity: 1;
+  }
+  75% {
+    left: 500px;
+    transform: rotateY(180deg);
+    opacity: 0.8;
+  }
+  100% {
+    left: 500px;
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
 }
 </style>
