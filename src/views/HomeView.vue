@@ -148,6 +148,10 @@ function abikesasc() {
   sortorder.value.available_rent_bikes = -1;
   sortorder.value.total = 0;
 }
+
+function haveSerchText(ar) {
+  return ar.indexOf(searchtext) == 0 ? false : true;
+}
 </script>
 
 <template>
@@ -312,9 +316,17 @@ function abikesasc() {
         </thead>
         <tbody>
           <tr v-for="bike in filteredData" :key="bike">
-            <td v-for="key in tittleList" :key="key">
-              <div v-if="key == ar"></div>
-              {{ bike[key] }}
+            <td class="text-center" v-for="key in tittleList" :key="key">
+              <div v-if="key == 'ar' && haveSerchText(bike[key])">
+                {{ bike[key].substring(0, bike[key].indexOf(searchtext)) }}
+                <span class="text-danger">
+                  {{ searchtext }}
+                </span>
+                {{ bike[key].substring(bike[key].indexOf(searchtext) + searchtext.length) }}
+              </div>
+              <div v-else>
+                {{ bike[key] }}
+              </div>
             </td>
           </tr>
         </tbody>
