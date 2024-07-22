@@ -1,6 +1,5 @@
 <script setup>
-import axios from 'axios';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 
 //搜尋用的字
 const searchtext = ref('');
@@ -30,9 +29,6 @@ const tittleList = [
   'longitude',
   'available_return_bikes'
 ];
-
-//呼叫api抓資料
-callapi();
 
 //計算要呈現的table
 const filteredData = computed(() => {
@@ -98,10 +94,11 @@ function settotalpage(data) {
 
 //呼叫api，獲得資料
 async function callapi() {
-  const res = await axios.get(
+  const res = await fetch(
     'https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json'
   );
-  bikeList.value = res.data;
+  const data = await res.json();
+  bikeList.value = data;
 }
 
 //改變當前頁數為page
@@ -125,7 +122,6 @@ function resetcurrpage() {
 function orderData(key, order) {
   sortkey.value = key;
   for (const skey in sortorder.value) {
-    console.log(skey);
     skey == key ? (sortorder.value[skey] = order) : (sortorder.value[skey] = 0);
   }
 }
@@ -133,6 +129,10 @@ function orderData(key, order) {
 function haveSerchText(ar) {
   return ar.indexOf(searchtext) == 0 ? false : true;
 }
+onMounted(async () => {
+  //呼叫api抓資料
+  await callapi();
+});
 </script>
 
 <template>
