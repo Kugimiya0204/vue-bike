@@ -179,7 +179,6 @@ onMounted(async () => {
             left: 500px;
             animation: moveToRight;
             animation-duration: 10s;
-            animation-iteration-count: infinite;
             animation-timing-function: cubic-bezier(0.4, 0.5, 0.9, 1);
           "
         />
