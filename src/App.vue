@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 
 //搜尋用的字
 const searchtext = ref('');
@@ -41,8 +41,6 @@ const filteredData = computed(() => {
 
   //如果有搜尋字
   if (searchdata) {
-    //重設目前頁數為1
-    resetcurrpage();
     //過濾要呈現table資料
     data = data.filter((row) => {
       return String(row['ar']).indexOf(searchdata) > -1;
@@ -67,20 +65,10 @@ const filteredData = computed(() => {
   //設定目前總頁數
   settotalpage(data);
 
-  //重設index
-  // let index = 0;
+  isRest.value ? resetpage : null;
 
   //如果有資料
   if (data) {
-    //將資料過濾成當前頁數應有的
-    // data = data.filter(() => {
-    //   index++;
-    //   if (index > (nowpage - 1) * perpagenumber && index <= nowpage * perpagenumber) {
-    //     return true;
-    //   }
-    //   return false;
-    // });
-    //將資料過濾成當前頁數應有的
     data = data.slice((nowpage - 1) * perpagenumber, nowpage * perpagenumber);
   }
 
@@ -113,10 +101,15 @@ function prevpage() {
 function nextpage() {
   currpage.value++;
 }
-//重設為第一頁
-function resetcurrpage() {
-  currpage.value = 1;
-}
+const isRest = ref(false);
+//更改搜尋字串時重製頁數
+watch(searchtext, () => {
+  if (searchtext.value) {
+    isRest.value = true;
+  } else {
+    isRest.value = false;
+  }
+});
 
 //依照傳入的鍵跟排序調整資料
 function orderData(key, order) {
@@ -126,9 +119,23 @@ function orderData(key, order) {
   }
 }
 
-function haveSerchText(ar) {
-  return ar.indexOf(searchtext) == 0 ? false : true;
+//重製當前頁數為1
+function resetpage() {
+  currpage.value = 1;
 }
+
+//判斷地址是否為搜尋字串並更改css
+const IsSearchText = (ar) => {
+  if (searchtext.value) {
+    return ar.replace(
+      searchtext.value,
+      `<span class="text-danger fw-bolder">${searchtext.value}</span>`
+    );
+  } else {
+    return ar;
+  }
+};
+
 onMounted(async () => {
   //呼叫api抓資料
   await callapi();
@@ -318,16 +325,10 @@ onMounted(async () => {
         <tbody>
           <tr v-for="bike in filteredData" :key="bike">
             <td class="text-center" v-for="key in tittleList" :key="key">
-              <div v-if="key == 'ar' && haveSerchText(bike[key])">
-                {{ bike[key].substring(0, bike[key].indexOf(searchtext)) }}
-                <span class="text-danger" style="font-weight: 900; font-size: 20px">
-                  {{ searchtext }}
-                </span>
-                {{ bike[key].substring(bike[key].indexOf(searchtext) + searchtext.length) }}
-              </div>
-              <div v-else>
+              <span v-if="key == 'ar'" v-html="IsSearchText(bike[key])"></span>
+              <span v-else>
                 {{ bike[key] }}
-              </div>
+              </span>
             </td>
           </tr>
         </tbody>
