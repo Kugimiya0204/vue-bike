@@ -65,8 +65,6 @@ const filteredData = computed(() => {
   //設定目前總頁數
   settotalpage(data);
 
-  isRest.value ? resetpage : null;
-
   //如果有資料
   if (data) {
     data = data.slice((nowpage - 1) * perpagenumber, nowpage * perpagenumber);
@@ -101,13 +99,11 @@ function prevpage() {
 function nextpage() {
   currpage.value++;
 }
-const isRest = ref(false);
+
 //更改搜尋字串時重製頁數
 watch(searchtext, () => {
   if (searchtext.value) {
-    isRest.value = true;
-  } else {
-    isRest.value = false;
+    resetpage();
   }
 });
 
