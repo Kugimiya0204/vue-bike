@@ -123,7 +123,6 @@ function resetcurrpage() {
 
 //依照傳入的鍵跟排序調整資料
 function orderData(key, order) {
-  console.log(key, order);
   sortkey.value = key;
   for (const skey in sortorder.value) {
     console.log(skey);
