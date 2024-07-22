@@ -120,29 +120,15 @@ function nextpage() {
 function resetcurrpage() {
   currpage.value = 1;
 }
-//以total(總車位數量)為鍵由大到小
-function totaldesc() {
-  sortkey.value = 'total';
-  sortorder.value.total = 1;
-  sortorder.value.available_rent_bikes = 0;
-}
-//以total(總車位數量)為鍵由小到大
-function totalasc() {
-  sortkey.value = 'total';
-  sortorder.value.total = -1;
-  sortorder.value.available_rent_bikes = 0;
-}
-//以available_return_bikes(可租借的腳踏車數量)為鍵由大到小
-function abikesdesc() {
-  sortkey.value = 'available_rent_bikes';
-  sortorder.value.available_rent_bikes = 1;
-  sortorder.value.total = 0;
-}
-//以available_return_bikes(可租借的腳踏車數量)為鍵由大到小
-function abikesasc() {
-  sortkey.value = 'available_rent_bikes';
-  sortorder.value.available_rent_bikes = -1;
-  sortorder.value.total = 0;
+
+//依照傳入的鍵跟排序調整資料
+function orderData(key, order) {
+  console.log(key, order);
+  sortkey.value = key;
+  for (const skey in sortorder.value) {
+    console.log(skey);
+    skey == key ? (sortorder.value[skey] = order) : (sortorder.value[skey] = 0);
+  }
 }
 
 function haveSerchText(ar) {
@@ -216,7 +202,7 @@ function haveSerchText(ar) {
                   fill="currentColor"
                   class="bi bi-caret-up"
                   viewBox="0 0 16 16"
-                  @click="totaldesc"
+                  @click="orderData('total', 1)"
                 >
                   <path
                     d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659"
@@ -243,7 +229,7 @@ function haveSerchText(ar) {
                   fill="currentColor"
                   class="bi bi-caret-down"
                   viewBox="0 0 16 16"
-                  @click="totalasc"
+                  @click="orderData('total', -1)"
                 >
                   <path
                     d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"
@@ -276,7 +262,7 @@ function haveSerchText(ar) {
                     fill="currentColor"
                     class="bi bi-caret-up"
                     viewBox="0 0 16 16"
-                    @click="abikesdesc"
+                    @click="orderData('available_rent_bikes', 1)"
                   >
                     <path
                       d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659"
@@ -303,7 +289,7 @@ function haveSerchText(ar) {
                     fill="currentColor"
                     class="bi bi-caret-down"
                     viewBox="0 0 16 16"
-                    @click="abikesasc"
+                    @click="orderData('available_rent_bikes', -1)"
                   >
                     <path
                       d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"
