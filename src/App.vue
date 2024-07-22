@@ -72,18 +72,20 @@ const filteredData = computed(() => {
   settotalpage(data);
 
   //重設index
-  let index = 0;
+  // let index = 0;
 
   //如果有資料
   if (data) {
     //將資料過濾成當前頁數應有的
-    data = data.filter(() => {
-      index++;
-      if (index > (nowpage - 1) * perpagenumber && index <= nowpage * perpagenumber) {
-        return true;
-      }
-      return false;
-    });
+    // data = data.filter(() => {
+    //   index++;
+    //   if (index > (nowpage - 1) * perpagenumber && index <= nowpage * perpagenumber) {
+    //     return true;
+    //   }
+    //   return false;
+    // });
+    //將資料過濾成當前頁數應有的
+    data = data.slice((nowpage - 1) * perpagenumber, nowpage * perpagenumber);
   }
 
   return data;
